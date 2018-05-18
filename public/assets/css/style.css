@@ -1,0 +1,56 @@
+body {
+    /*font-family: Helvetica, Arial, sans-serif;
+    !*font-size: 12px;*!*/
+    background-color: #e9ebee;
+}
+
+/*main-header*/
+.skin-green .main-header .logo,
+.skin-green .main-header .navbar,
+.skin-green .main-header li.user-header {
+    background-color: #007437;
+}
+
+/*avatar*/
+.user-panel > .info {
+    padding: 15px 5px 5px 15px;
+}
+
+.navbar-nav > .user-menu .user-image {
+    border-radius: 6px;
+}
+
+.skin-green .user-panel > .info, .skin-green .user-panel > .info > a {
+    color: #1d2129;
+}
+
+/*main-sidebar*/
+.skin-green .wrapper, .skin-green .main-sidebar, .skin-green .left-side {
+    background-color: #e9ebee;
+}
+
+/*header sidebar*/
+.skin-green .sidebar-menu > li.header {
+    color: #4b4f56;
+    background: #e9ebee;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/*sidebar-menu*/
+.skin-green .sidebar a {
+    color: #1d2129;
+}
+
+.skin-green .sidebar-menu > li:hover > a {
+    color: #00a65a;
+    background: #f6f7f9;
+    border-radius: 2px;
+}
+
+.skin-green .sidebar-menu > li.active > a {
+    color: #00a65a;
+    background: #f6f7f9;
+    border: 1px solid #dddfe2;
+    border-radius: 2px;
+}
