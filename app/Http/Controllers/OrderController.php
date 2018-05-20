@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Cart;
-use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductOption;
-use App\Models\Order;
-use App\Models\OrderProduct;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Validator;
 
 class OrderController extends Controller
 {
@@ -21,13 +19,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        /*Cart::add('192ao12', 'Product 1', 1, 9.99);
-        Cart::add('1239ad0', 'Product 2', 2, 5.95, ['size' => 'large']);
-        Cart::store('minhphuc429@gmail.com');*/
-        $carts = Cart::content();
-        //print_r($carts);die;
 
-        return view('orders.cart', compact('carts'));
     }
 
     /**
@@ -37,9 +29,6 @@ class OrderController extends Controller
      */
     public function create()
     {
-        // Cart::add('1', 'Classic Phin Freeze', 1, 49000);
-        // Cart::destroy();
-        // Cart::store('minhphuc429@gmail.com');
         $categories = Category::all();
         $products = Product::all();
 
@@ -54,8 +43,40 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $order = new Order;
+        $request->validate([
+            'customer_name' => 'required',
+            'customer_phone' => 'required',
+            'customer_address' => 'required',
+            'delivery_time' => 'required|date_format:d/m/Y H:i',
+        ]);
 
+        $order = new Order;
+        if (Auth::check()) $order->user_id = Auth::id();
+        $order->status = 'pending';
+        $order->customer_name = $request->input('customer_name');
+        $order->customer_address = $request->input('customer_address');
+        $order->customer_phone = $request->input('customer_phone');
+        $order->delivery_time = Carbon::createFromFormat('d/m/Y H:i', $request->input('delivery_time'));
+        $order->shipping_fee = $request->input('shipping_fee');
+        $order->payment_method = $request->input('payment_method');
+        $order->subtotal = \Cart::subtotal();
+        $order->total = $request->input('total');
+        $order->save();
+
+        foreach(\Cart::content() as $row)
+        {
+            $productId = $row->id;
+            $quantity = $row->qty;
+            $productOption = ProductOption::where('key', 'size')
+                ->where('value', $row->options->size)
+                ->get(['id'])
+                ->first();
+            $optionId = $productOption['id'];
+            $order->products()->attach($productId, ['product_option' => $optionId, 'quantity' => $quantity]);
+        }
+
+        \Cart::destroy();
+        return redirect()->back()->with('status', 'Đặt Hàng Thành Công');
     }
 
     /**
@@ -101,28 +122,5 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function InsertShoppingCartItem(Request $request)
-    {
-        $request->validate([
-            'product_id' => 'required|numeric'
-        ]);
-
-        $productId = $request->input('product_id');
-        $product = Product::findOrFail($productId);
-        Cart::add($productId, $product->name, 1, $product->price); // TODO: product size
-
-        return response()->json(['message' => 'Insert ShoppingCart Item success']);
-    }
-
-    public function LoadCartItem()
-    {
-
-    }
-
-    public function completion()
-    {
-        return view('orders.completion');
     }
 }

@@ -94,7 +94,20 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'image' => 'image|max:10240'
+        ]);
+
+        $product = Product::findOrFail($id);
+        $product->category_id = $request->input('category_id');
+        $product->name = $request->input('name');
+        $product->image = $request->file('image')->store('public/images');
+        $product->price = $request->input('price');
+        $product->save();
+
+        // TODO: cap nhat product_option
+
+        return redirect()->back()->with('status', 'Cập Nhật Sản Phẩm Thành Công');
     }
 
     /**
@@ -110,5 +123,10 @@ class ProductController extends Controller
         ProductOption::where('product_id', $id)->delete();
 
         return response()->json();
+    }
+
+    public function getProductOption(Request $request)
+    {
+        return response()->json(ProductOption::where('product_id', $request->input('product_id'))->get());
     }
 }

@@ -15,74 +15,74 @@ class ProductOptionsTableSeeder extends Seeder
         \DB::table('product_options')->insert([
             [
                 'product_id' => 1,
-                'key' => 'Size',
-                'value' => 'Cỡ nhỏ',
+                'key' => 'size',
+                'value' => 'Size M',
                 'surcharge' => 0
             ],
             [
                 'product_id' => 1,
-                'key' => 'Size',
-                'value' => 'Cỡ vừa',
+                'key' => 'size',
+                'value' => 'Size L',
                 'surcharge' => 10000
             ],
             [
                 'product_id' => 2,
-                'key' => 'Size',
-                'value' => 'Cỡ nhỏ',
+                'key' => 'size',
+                'value' => 'Size M',
                 'surcharge' => 0
             ],
             [
                 'product_id' => 2,
-                'key' => 'Size',
-                'value' => 'Cỡ vừa',
+                'key' => 'size',
+                'value' => 'Size L',
                 'surcharge' => 10000
             ],
             [
                 'product_id' => 3,
-                'key' => 'Size',
-                'value' => 'Cỡ nhỏ',
+                'key' => 'size',
+                'value' => 'Size M',
                 'surcharge' => 0
             ],
             [
                 'product_id' => 3,
-                'key' => 'Size',
-                'value' => 'Cỡ vừa',
+                'key' => 'size',
+                'value' => 'Size L',
                 'surcharge' => 10000
             ],
             [
                 'product_id' => 4,
-                'key' => 'Size',
-                'value' => 'Cỡ nhỏ',
+                'key' => 'size',
+                'value' => 'Size M',
                 'surcharge' => 0
             ],
             [
                 'product_id' => 4,
-                'key' => 'Size',
-                'value' => 'Cỡ vừa',
+                'key' => 'size',
+                'value' => 'Size L',
                 'surcharge' => 6000
             ],
             [
                 'product_id' => 5,
-                'key' => 'Size',
-                'value' => 'Cỡ nhỏ',
+                'key' => 'size',
+                'value' => 'Size M',
                 'surcharge' => 0
             ],
             [
                 'product_id' => 5,
-                'key' => 'Size',
-                'value' => 'Cỡ vừa',
+                'key' => 'size',
+                'value' => 'Size L',
                 'surcharge' => 6000
             ],
             [
                 'product_id' => 6,
-                'key' => 'Size',
-                'value' => 'Cỡ nhỏ',
+                'key' => 'size',
+                'value' => 'Size M',
                 'surcharge' => 0
             ],
             [
                 'product_id' => 6,
-                'key' => 'Size',
-                'value' => 'Cỡ vừa',
+                'key' => 'size',
+                'value' => 'Size L',
                 'surcharge' => 6000
             ],
         ]);

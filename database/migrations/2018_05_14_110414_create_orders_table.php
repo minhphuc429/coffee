@@ -20,9 +20,10 @@ class CreateOrdersTable extends Migration
             $table->string('customer_name');
             $table->string('customer_address');
             $table->string('customer_phone');
-            $table->dateTime('delivery time');
+            $table->dateTime('delivery_time');
             $table->float('shipping_fee');
             $table->string('payment_method');
+            $table->float('subtotal');
             $table->float('total');
             $table->timestamps();
         });

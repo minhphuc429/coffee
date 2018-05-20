@@ -35,7 +35,17 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('roles', 'RoleController')->except([
         'show'
     ]);
+});
 
-    Route::get('file','FileController@index');
-    Route::post('file','Filecontroller@doUpload');
+
+Route::get('cart', 'CartController@index');
+Route::post('get-product-options', 'ProductController@getProductOption');
+
+Route::prefix('order')->group(function () {
+    Route::get('', 'OrderController@create');
+    Route::post('InsertShoppingCartItem', 'CartController@InsertShoppingCartItem');
+    Route::post('UpdateShoppingCartItem', 'CartController@UpdateShoppingCartItem');
+    Route::post('RemoveShoppingCartItem', 'CartController@RemoveShoppingCartItem');
+    Route::get('completion', 'CartController@completion');
+    Route::post('completion', 'OrderController@store');
 });

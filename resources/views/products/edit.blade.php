@@ -35,7 +35,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" action="{{ action('ProductController@update', $product->id) }}" method="POST">
+                <form class="form-horizontal" action="{{ action('ProductController@update', $product->id) }}" method="POST" enctype="multipart/form-data">
                     {{ method_field('PATCH') }}
                     {{ csrf_field() }}
 
