@@ -35,6 +35,8 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('roles', 'RoleController')->except([
         'show'
     ]);
+
+    Route::resource('orders', 'OrderController');
 });
 
 

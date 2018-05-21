@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductOption;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-
+        $orders = Order::all();
+        return view('orders.index', compact('orders'));
     }
 
     /**
@@ -52,7 +54,6 @@ class OrderController extends Controller
 
         $order = new Order;
         if (Auth::check()) $order->user_id = Auth::id();
-        $order->status = 'pending';
         $order->customer_name = $request->input('customer_name');
         $order->customer_address = $request->input('customer_address');
         $order->customer_phone = $request->input('customer_phone');
@@ -63,8 +64,7 @@ class OrderController extends Controller
         $order->total = $request->input('total');
         $order->save();
 
-        foreach(\Cart::content() as $row)
-        {
+        foreach (\Cart::content() as $row) {
             $productId = $row->id;
             $quantity = $row->qty;
             $productOption = ProductOption::where('key', 'size')
@@ -87,7 +87,12 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+        $order = Order::findOrFail($id);
+        $deliver_id = $order->deliver_id;
+        if ($deliver_id)
+            $deliver = User::findOrFail($deliver_id, ['name', 'phone']);
+
+        return view('orders.show', compact('order', 'deliver'));
     }
 
     /**
@@ -98,7 +103,13 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        $order = Order::findOrFail($id);
+        $deliver_id = $order->deliver_id;
+        $delivers = User::whereHas('roles', function ($q) {
+            $q->where('name', 'deliver');
+        })->get(['id', 'name']);
+        $status = Order::getPossibleStatuses();
+        return view('orders.edit', compact('order', 'deliver_id', 'delivers', 'status'));
     }
 
     /**
@@ -110,7 +121,15 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'status' => 'required'
+        ]);
+
+        $order = Order::findOrFail($id);
+        $order->status = $request->input('status');
+        if ($request->input('deliver_id') !== 0) $order->deliver_id = $request->input('deliver_id');
+        $order->update();
+        return redirect()->back()->with('status', 'Cập Nhật Đơn Hàng Thành Công');
     }
 
     /**

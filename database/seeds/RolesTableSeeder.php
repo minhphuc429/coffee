@@ -9,12 +9,17 @@ class RolesTableSeeder extends Seeder
     {
         $role_manager = new Role();
         $role_manager->name = 'manager';
-        $role_manager->description = 'A Manager User';
+        $role_manager->description = 'chị quản lý';
         $role_manager->save();
 
         $role_employee = new Role();
-        $role_employee->name = 'employee';
-        $role_employee->description = 'A Employee User';
+        $role_employee->name = 'customer care';
+        $role_employee->description = 'nhân viên chăm sóc khách hàng';
+        $role_employee->save();
+
+        $role_employee = new Role();
+        $role_employee->name = 'deliver';
+        $role_employee->description = 'nhân viên giao hàng';
         $role_employee->save();
     }
 }

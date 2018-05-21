@@ -87,7 +87,7 @@
                         <tr>
                             <td class="col-sm-8 col-md-10">
                                 <h5>
-                                    <span class="label label-primary"
+                                    <span class="badge"
                                           style="padding-bottom: 0;">{{ $row->qty }}</span> {{ $row->name }}
                                     [@php echo ($row->options->has('size') ? $row->options->size : ''); @endphp]
                                 </h5>
