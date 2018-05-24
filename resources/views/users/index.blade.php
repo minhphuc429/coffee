@@ -48,6 +48,7 @@
                             <th>Họ Tên</th>
                             <th>Email</th>
                             <th>Phone</th>
+                            <th>Role</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -59,9 +60,15 @@
                                 <td>{{ $user->email }} </td>
                                 <td>{{ $user->phone }}</td>
                                 <td>
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-success ripple">Sửa</a>
+                                    @foreach($user->roles as $role)
+                                        <i class="label label-default">{{ $role->name }}</i>
+
+                                    @endforeach
+                                </td>
+                                <td>
+                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-default ripple"><i class="glyphicon glyphicon-edit"></i></a>
                                     <!-- Trigger the modal with a button -->
-                                    <button class="btn btn-danger ripple" data-id="{{$user->id}}" data-name="{{$user->name}}" data-message="{{ $user->name }}" data-toggle="modal" data-target="#modal-delete">Xóa</button>
+                                    <button class="btn btn-default ripple" data-id="{{$user->id}}" data-name="{{$user->name}}" data-message="{{ $user->name }}" data-toggle="modal" data-target="#modal-delete"><i class="glyphicon glyphicon-trash text-red"></i></button>
                                 </td>
                             </tr>
                         @endforeach

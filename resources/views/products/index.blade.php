@@ -42,6 +42,7 @@
                             <th></th>
                             <th>Name</th>
                             <th>Price</th>
+                            <th>Category</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -54,10 +55,11 @@
                                 <td><img src="{{ asset(Storage::url($product->image)) }}" alt="" style="height: 60px; width: 60px"></td>
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->price }}</td>
+                                <td>{{ $product->category->name }}</td>
                                 <td>
-                                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-success">Sửa</a>
+                                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-default"><i class="glyphicon glyphicon-edit"></i></a>
                                     <!-- Trigger the modal with a button -->
-                                    <button class="btn btn-danger ripple" data-id="{{$product->id}}" data-name="{{$product->name}}" data-message="{{ $product->name }}" data-toggle="modal" data-target="#modal-delete">Xóa</button>
+                                    <button class="btn btn-default ripple" data-id="{{$product->id}}" data-name="{{$product->name}}" data-message="{{ $product->name }}" data-toggle="modal" data-target="#modal-delete"><i class="glyphicon glyphicon-trash text-red"></i></button>
                                 </td>
                             </tr>
                         @endforeach

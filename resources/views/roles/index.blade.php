@@ -57,9 +57,9 @@
                                 <td>{{ $role->name }}</td>
                                 <td>{{ $role->description }} </td>
                                 <td>
-                                    <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-success ripple">Sửa</a>
+                                    <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-default ripple"><i class="glyphicon glyphicon-edit"></i></a>
                                     <!-- Trigger the modal with a button -->
-                                    <button class="btn btn-danger ripple" data-id="{{$role->id}}" data-name="{{$role->name}}" data-message="{{ $role->name }}" data-toggle="modal" data-target="#modal-delete">Xóa</button>
+                                    <button class="btn btn-default ripple" data-id="{{$role->id}}" data-name="{{$role->name}}" data-message="{{ $role->name }}" data-toggle="modal" data-target="#modal-delete"><i class="glyphicon glyphicon-trash text-red"></i></button>
                                 </td>
                             </tr>
                         @endforeach

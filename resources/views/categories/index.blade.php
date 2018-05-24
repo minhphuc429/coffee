@@ -55,9 +55,9 @@
                             <tr id="{{ $category->id }}">
                                 <td>{{ $category->name }}</td>
                                 <td>
-                                    <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-success">Sửa</a>
+                                    <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-default"><i class="glyphicon glyphicon-edit"></i></a>
                                     <!-- Trigger the modal with a button -->
-                                    <button class="btn btn-danger ripple" data-id="{{$category->id}}" data-name="{{$category->name}}" data-message="{{ $category->name }}" data-toggle="modal" data-target="#modal-delete">Xóa</button>
+                                    <button class="btn btn-default ripple" data-id="{{$category->id}}" data-name="{{$category->name}}" data-message="{{ $category->name }}" data-toggle="modal" data-target="#modal-delete"><i class="glyphicon glyphicon-trash text-red"></i></button>
                                 </td>
                             </tr>
                         @endforeach

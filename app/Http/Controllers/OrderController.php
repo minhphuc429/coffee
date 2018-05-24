@@ -151,7 +151,7 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function orderHistory() {
-        if (!Auth::check()){ // TODO: only user of order
+        if (Auth::check()){ // TODO: only user of order
             $user_id = Auth::id();
             $orders = Order::where('user_id', $user_id)->get();
 

@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Danh Sách Đơn Hàng')
+@section('title', 'Lịch Sử Đặt Hàng')
 
 @section('stylesheet')
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
 @endsection
 
-@section('content-header', 'Danh Sách Đơn Hàng')
+@section('content-header', 'Lịch Sử Đặt Hàng')
 
 @section('content')
     @if (count($errors) > 0)
@@ -53,7 +53,6 @@
                                 <td>{{ number_format($order->total, 0, ',' , '.') }}đ</td>
                                 <td><label for="" class="badge">{{ $order->status }}</label></td>
                                 <td>
-
                                     <a href="{{ route('order.detail', $order->id) }}">Xem chi tiết</a>
                                     @if($order->status == 'processing' )
                                         {{ Form::open(['route' => [ 'order.cancel' ]]) }}

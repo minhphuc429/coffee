@@ -7,12 +7,12 @@
         <form action="{{ url('/login') }}" method="post">
             {{ csrf_field() }}
 
-            <div class="form-group{{ $errors->has('username') ? ' has-error animated shake' : '' }} has-feedback">
-                <input type="text" name="username" class="form-control" placeholder="ID" value="{{ old('username') }}" required autofocus>
+            <div class="form-group{{ $errors->has('email') ? ' has-error animated shake' : '' }} has-feedback">
+                <input type="text" name="email" class="form-control" placeholder="Email" value="{{ old('email') }}" required autofocus>
 
-                @if ($errors->has('username'))
+                @if ($errors->has('email'))
                     <span class="help-block">
-                        <strong>{{ $errors->first('username') }}</strong>
+                        <strong>{{ $errors->first('email') }}</strong>
                     </span>
                 @endif
 
