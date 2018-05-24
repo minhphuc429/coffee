@@ -50,4 +50,7 @@ Route::prefix('order')->group(function () {
     Route::post('RemoveShoppingCartItem', 'CartController@RemoveShoppingCartItem');
     Route::get('completion', 'CartController@completion');
     Route::post('completion', 'OrderController@store');
+    Route::get('history', 'OrderController@orderHistory');
+    Route::get('detail/{id}', 'OrderController@orderDetail')->where('id', '[0-9]+')->name('order.detail');
+    Route::post('cancel', 'OrderController@cancelOrder')->name('order.cancel');
 });

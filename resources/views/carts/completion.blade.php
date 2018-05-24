@@ -241,6 +241,6 @@
         }
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0AyZ_OqRmV5GsK-H66L5vKgU3u8Uxvs4&libraries=places&language=vi&region=vn&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDD1UA2tZCa8hW5SKIKERxdnt53ujnBXsw&libraries=places&language=vi&region=vn&callback=initMap"
             async defer></script>
 @endsection

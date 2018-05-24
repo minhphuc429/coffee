@@ -140,6 +140,57 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $order = Order::findOrFail($id);
+        $order->delete();
+        return response()->json();
+    }
+
+    /**
+     * Display order history.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function orderHistory() {
+        if (!Auth::check()){ // TODO: only user of order
+            //$user_id = Auth::id();
+            $user_id = 1;
+            $orders = Order::where('user_id', $user_id)->get();
+
+            return view('orders.history', compact('orders'));
+        }
+    }
+    /**
+     * Display order detail.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function orderDetail(int $id) {
+        var_dump($id);
+        if (!Auth::check()){ // TODO: only user of order
+            //$user_id = Auth::id();
+            $user_id = 1;
+            $order = Order::findOrFail($id)->first();
+
+            return view('orders.detail', compact('order'));
+        }
+    }
+
+    /**
+     * Cancel order.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function cancelOrder(Request $request) {
+        $request->validate([
+            'order_id' => 'required'
+        ]);
+
+        $order_id = $request->input('order_id');
+        $order = Order::findOrFail($order_id); // TODO: only user of order
+        $order->status = 'cancelled';
+        $order->update();
+
+        return redirect()->back()->with('status', 'Hủy Đơn Hàng Thành Công');
     }
 }
