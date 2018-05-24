@@ -133,8 +133,7 @@ class UserController extends Controller
 
     public function editInformation()
     {
-        $user_id = /*\Auth::id()*/
-            1;
+        $user_id = \Auth::id();
         $user = User::findOrFail($user_id);
 
         return view('users.information', compact('user'));

@@ -152,8 +152,7 @@ class OrderController extends Controller
      */
     public function orderHistory() {
         if (!Auth::check()){ // TODO: only user of order
-            //$user_id = Auth::id();
-            $user_id = 1;
+            $user_id = Auth::id();
             $orders = Order::where('user_id', $user_id)->get();
 
             return view('orders.history', compact('orders'));
@@ -165,10 +164,7 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function orderDetail(int $id) {
-        var_dump($id);
         if (!Auth::check()){ // TODO: only user of order
-            //$user_id = Auth::id();
-            $user_id = 1;
             $order = Order::findOrFail($id)->first();
 
             return view('orders.detail', compact('order'));

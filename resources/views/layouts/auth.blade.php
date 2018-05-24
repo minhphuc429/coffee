@@ -34,11 +34,6 @@
             }
         }
 
-        .navbar-default {
-            background-color: green;
-            border-color: #025215;
-        }
-
         .footer {
             position: absolute;
             bottom: 0;
@@ -73,19 +68,7 @@
 </head>
 <body class="hold-transition login-page">
 
-<nav class="navbar navbar-default navbar-fixed">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-2 col-md-offset-2">
-                <img src="{{ asset('images/logo.svg') }}" alt="Logo" class="center-block" height="115px">
-            </div>
 
-            <div class="col-md-4 col-md-offset-1">
-                <img src="{{ asset('images/dong-a.svg') }}" alt="Coffee Delivery" class="center-block" height="115px" width="100%">
-            </div>
-        </div>
-    </div>
-</nav>
 
 <div class="login-box">
     <div class="login-logo">
@@ -98,9 +81,7 @@
 
 <footer class="footer">
     <div class="container">
-        <p class="text-muted">© 2017 Coffee Delivery -
-            <a href="http://donga.edu.vn" target="_blank" style="color: #ffffff;">Laravel</a>
-        </p>
+        <p class="text-muted">© 2017 Coffee Delivery</p>
     </div>
 </footer>
 

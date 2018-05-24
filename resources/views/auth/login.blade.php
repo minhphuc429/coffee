@@ -1,69 +1,52 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+    <div class="login-box-body animated bounceIn">
+        <p class="login-box-msg">Đăng nhập hệ thống</p>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+        <form action="{{ url('/login') }}" method="post">
+            {{ csrf_field() }}
 
-                        <div class="form-group row">
-                            <label for="email" class="col-sm-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+            <div class="form-group{{ $errors->has('username') ? ' has-error animated shake' : '' }} has-feedback">
+                <input type="text" name="username" class="form-control" placeholder="ID" value="{{ old('username') }}" required autofocus>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
+                @if ($errors->has('username'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('username') }}</strong>
+                    </span>
+                @endif
 
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    {{ __('Forgot Your Password?') }}
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <span class="fa fa-id-card-o form-control-feedback"></span>
             </div>
-        </div>
+
+            <div class="form-group{{ $errors->has('password') ? ' has-error animated shake' : '' }} has-feedback">
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
+
+                @if ($errors->has('password'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('password') }}</strong>
+                    </span>
+                @endif
+
+                <span class="fa fa-key form-control-feedback"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-7">
+                    <div class="checkbox icheck">
+                        <label> <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me </label><br>
+                    </div>
+                </div>
+                <!-- /.col -->
+
+                <div class="col-xs-5">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat ripple">Đăng Nhập</button>
+                </div>
+                <!-- /.col -->
+            </div>
+        </form>
+
+        <a href="{{ url('/password/reset') }}" class="ripple">Quên mật khẩu?</a>
     </div>
-</div>
+    <!-- /.login-box-body -->
 @endsection
