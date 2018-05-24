@@ -54,3 +54,12 @@ Route::prefix('order')->group(function () {
     Route::get('detail/{id}', 'OrderController@orderDetail')->where('id', '[0-9]+')->name('order.detail');
     Route::post('cancel', 'OrderController@cancelOrder')->name('order.cancel');
 });
+
+Route::prefix('tai-khoan')->group(function () {
+    Route::get('', 'UserController@editInformation');
+    Route::post('', 'UserController@updateInformation');
+    Route::get('doi-mat-khau', function () {
+        return view('auth.passwords.update');
+    });
+    Route::post('doi-mat-khau', 'UserController@updatePassword');
+});
