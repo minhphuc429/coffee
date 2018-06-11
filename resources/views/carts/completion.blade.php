@@ -1,4 +1,4 @@
-@extends('orders.layout')
+@extends('carts.layout')
 @section('styles')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
     <style>
@@ -64,7 +64,7 @@
                 <div class="form-group">
                     <label for="payment_method">Phương thức thanh toán</label>
                     <select class="form-control" name="payment_method" id="payment_method">
-                        <option value="COD">Tiền mặt</option>
+                        <option value="cash on delivery">Tiền mặt</option>
                     </select>
                 </div>
 
@@ -74,30 +74,25 @@
             </div>
 
             <div class="col-md-6">
-                <div id="row">
-                    <div>
-                        <strong>Results</strong>
-                    </div>
-                    <div id="output"></div>
-                </div>
-
-                <h5>Chi tiết đơn hàng</h5>
+                <h4>Chi tiết đơn hàng</h4>
                 <table class="table table-hover">
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                    </tr>
                     @foreach($carts as $row)
                         <tr>
-                            <td class="col-sm-8 col-md-10">
-                                <h5>
-                                    <span class="badge"
-                                          style="padding-bottom: 0;">{{ $row->qty }}</span> {{ $row->name }}
-                                    [@php echo ($row->options->has('size') ? $row->options->size : ''); @endphp]
-                                </h5>
+                            <td class="col-md-8">
+                                <h5>{{ $row->name }} <i class="label label-default">{{ $row->options->size }}</i></h5>
                             </td>
-                            <td class="col-md-2 text-right"><h5>{{ number_format($row->total, 0, ',', '.') }}
-                                    đ</h5></td>
+                            <td><h5>{{ $row->qty }}</h5></td>
+                            <td class="col-md-2 text-right"><h5>{{ number_format($row->total, 0, ',', '.') }}đ</h5></td>
                         </tr>
                     @endforeach
                     <tr>
                         <td><h5>Cộng</h5></td>
+                        <td></td>
                         <td class="text-right">
                             <h5><strong class="subtotal">{{ number_format($total, 0, ',', '.') }}đ</strong></h5>
                         </td>
@@ -108,10 +103,12 @@
                                 <span class="distance text-danger"></span>
                             </h5>
                         </td>
+                        <td></td>
                         <td class="col-sm-1 col-md-1 text-right"><h5><strong class="shipping_fee"></strong></h5></td>
                     </tr>
                     <tr>
                         <td><h5>Tạm tính:</h5></td>
+                        <td></td>
                         <td class="col-sm-1 col-md-1 text-right"><h5><strong class="total"></strong></h5></td>
                     </tr>
                 </table>
@@ -201,13 +198,10 @@
                 if (status !== 'OK') {
                     alert('Error was: ' + status);
                 } else {
-                    var outputDiv = document.getElementById('output');
-                    outputDiv.innerHTML = '';
                     var originList = response.originAddresses;
                     for (var i = 0; i < originList.length; i++) {
                         var results = response.rows[i].elements;
                         for (var j = 0; j < results.length; j++) {
-                            //outputDiv.innerHTML += results[j].distance.text + ' in ' + results[j].duration.text + '<br>';
                             let distance = (results[j].distance.value / 1000).toFixed(1);
                             shipping_fee = distance * 5000;
                             let total = Number($('input[name="subtotal"]').val()) + shipping_fee;

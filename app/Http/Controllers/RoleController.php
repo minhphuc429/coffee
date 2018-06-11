@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRole;
+use App\Http\Requests\UpdateRole;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -36,13 +38,8 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRole $request)
     {
-        $request->validate([
-            'name' => 'required|unique:roles,name|max:255',
-            'description' => 'required'
-        ]);
-
         Role::create($request->all());
 
         return redirect()->back()->with('status', 'Tạo Role Thành Công');
@@ -79,13 +76,8 @@ class RoleController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRole $request, $id)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'required'
-        ]);
-
         $role = Role::findOrFail($id);
         $role->update($request->all());
 

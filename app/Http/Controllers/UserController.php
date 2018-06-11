@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUser;
+use App\Http\Requests\UpdateInformation;
+use App\Http\Requests\UpdatePassword;
+use App\Http\Requests\UpdateUser;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -40,16 +44,8 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUser $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,',
-            'password' => 'required|same:confirm-password',
-            'phone' => 'required|unique:users,phone',
-            'address' => 'required',
-        ]);
-
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
 
@@ -91,16 +87,8 @@ class UserController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUser $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'same:confirm-password',
-            'phone' => 'required|unique:users,phone,' . $id,
-            'address' => 'required',
-        ]);
-
         $input = $request->all();
         if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
@@ -139,16 +127,8 @@ class UserController extends Controller
         return view('users.information', compact('user'));
     }
 
-    public function updateInformation(Request $request)
+    public function updateInformation(UpdateInformation $request)
     {
-        $request->validate([
-            'user_id' => 'required',
-            'name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-            'address' => 'required'
-        ]);
-
         $user = User::findOrFail($request->input('user_id'));
         $user->name = $request->input('name');
         $user->address = $request->input('address');
@@ -165,14 +145,8 @@ class UserController extends Controller
      * @param  Request $request
      * @return Response
      */
-    public function updatePassword(Request $request)
+    public function updatePassword(UpdatePassword $request)
     {
-        $request->validate([
-            'current_password'      => 'required',
-            'password'              => 'required|between:8,32',
-            'password_confirmation' => 'required|same:password',
-        ]);
-
         // Verifying A Password Against A Hash
         if (\Hash::check($request->input('current_password'), \Auth::user()->getAuthPassword())) {
             $request->user()->fill([

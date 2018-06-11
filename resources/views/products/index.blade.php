@@ -43,6 +43,7 @@
                             <th>Name</th>
                             <th>Price</th>
                             <th>Category</th>
+                            <th>Size</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -56,6 +57,11 @@
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->price }}</td>
                                 <td>{{ $product->category->name }}</td>
+                                <td>
+                                    @foreach($product->productOptions as $option)
+                                        <i class="label label-default">{{ $option->value }}</i>
+                                    @endforeach
+                                </td>
                                 <td>
                                     <a href="{{ route('products.edit', $product->id) }}" class="btn btn-default"><i class="glyphicon glyphicon-edit"></i></a>
                                     <!-- Trigger the modal with a button -->

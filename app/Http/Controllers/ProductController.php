@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProduct;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductOption;
@@ -38,12 +39,8 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProduct $request)
     {
-        $request->validate([
-            'image' => 'image|max:10240'
-        ]);
-
         $product = new Product;
         $product->category_id = $request->input('category_id');
         $product->name = $request->input('name');
@@ -81,8 +78,11 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-        $categories = Category::all();
-        return view('products.edit', compact('product', 'categories'));
+        $categories = [];
+        foreach (Category::all() as $category)
+            $categories[$category->id] = $category->name;
+        $options = $product->productOptions;
+        return view('products.edit', compact('product', 'categories', 'options'));
     }
 
     /**
@@ -92,20 +92,27 @@ class ProductController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreProduct $request, $id)
     {
-        $request->validate([
-            'image' => 'image|max:10240'
-        ]);
-
         $product = Product::findOrFail($id);
         $product->category_id = $request->input('category_id');
         $product->name = $request->input('name');
-        $product->image = $request->file('image')->store('public/images');
+        if ($request->file('image')) {
+            Storage::delete($product->image);
+            $product->image = $request->file('image')->store('public/images');
+        }
         $product->price = $request->input('price');
         $product->save();
 
-        // TODO: cap nhat product_option
+        if ($request->input('values')) {
+            ProductOption::where('product_id', $id)->delete();
+            foreach ($request->input('values') as $key => $value)
+                $product->productOptions()->create([
+                    'key' => 'size',
+                    'value' => $value,
+                    'surcharge' => $request->input('surcharges')[$key]
+                ]);
+        }
 
         return redirect()->back()->with('status', 'Cập Nhật Sản Phẩm Thành Công');
     }

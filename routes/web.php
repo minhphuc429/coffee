@@ -55,8 +55,11 @@ Route::prefix('order')->group(function () {
 
     Route::middleware('auth')->group(function () {
         Route::get('history', 'OrderController@orderHistory');
-        Route::get('detail/{id}', 'OrderController@orderDetail')->where('id', '[0-9]+')->name('order.detail');
-        Route::post('cancel', 'OrderController@cancelOrder')->name('order.cancel');
+        Route::get('detail/{id}', 'OrderController@orderDetail')
+            ->where('id', '[0-9]+')
+            ->name('order.detail');
+        Route::post('cancel', 'OrderController@cancelOrder')
+            ->name('order.cancel');
     });
 });
 

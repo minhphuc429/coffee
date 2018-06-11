@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -36,11 +36,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function roles()
-    {
-        return $this->belongsToMany('App\Models\Role');
-    }
-
     public function orders()
     {
         return $this->hasMany('App\Models\Order');
@@ -69,6 +64,11 @@ class User extends Authenticatable
     public function hasAnyRole($roles)
     {
         return null !== $this->roles()->whereIn('name', $roles)->first();
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role');
     }
 
     /**

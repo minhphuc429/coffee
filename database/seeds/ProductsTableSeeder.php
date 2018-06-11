@@ -49,7 +49,7 @@ class ProductsTableSeeder extends Seeder
                 'category_id' => 4
             ],
             [
-                'name' => 'Trà thanh đào',
+                'name' => 'Trà thạch đào',
                 'price' => 39000,
                 'category_id' => 4
             ],

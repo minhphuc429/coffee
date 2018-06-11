@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductOption extends Model
 {
-    protected $fillable = ['key', 'value', 'surcharge'];
     public $timestamps = false;
+    protected $fillable = ['key', 'value', 'surcharge'];
 
     public function product()
     {

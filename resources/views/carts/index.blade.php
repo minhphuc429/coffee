@@ -1,4 +1,4 @@
-@extends('orders.layout')
+@extends('carts.layout')
 @section('styles')
 @endsection
 
@@ -103,7 +103,7 @@
                     success: function (data) {
                         console.log(data);
                         input_qty.parents('tr').find('strong.subtotal').text(data.carts[rowId].subtotal + 'đ');
-                        $('strong.total').text(data.total + 'đ')
+                        $('#total').text(data.total + 'đ')
                     },
                     error: function (error) {
                         console.log(error.responseJSON)
@@ -133,7 +133,8 @@
                     success: function (data) {
                         console.log(data);
                         tr.remove();
-                        $('strong#total').text(data + 'đ')
+                        $('strong#total').text(data.total + 'đ');
+                        $('#item_count').text(data.count);
                     },
                     error: function (error) {
                         console.log(error.responseJSON)

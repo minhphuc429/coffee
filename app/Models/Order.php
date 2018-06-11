@@ -17,17 +17,6 @@ class Order extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = ['user_id', 'status', 'customer_name', 'customer_address', 'customer_phone', 'delivery_time', 'shipping_fee', 'payment_method', 'total'];
 
-    public function user()
-    {
-        return $this->belongsTo('App\Models\User');
-    }
-
-    public function products()
-    {
-        return $this->belongsToMany('App\Models\Product')
-            ->withPivot('product_option', 'quantity');
-    }
-
     public static function getPossibleStatuses()
     {
         $type = DB::select(DB::raw('SHOW COLUMNS FROM orders WHERE Field = "status"'))[0]->Type;
@@ -37,5 +26,16 @@ class Order extends Model
             $values[trim($value, "'")] = ucfirst(trim($value, "'"));
         }
         return $values;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany('App\Models\Product')
+            ->withPivot('product_option', 'quantity');
     }
 }

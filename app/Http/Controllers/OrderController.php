@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CancelOrder;
+use App\Http\Requests\StoreOrder;
+use App\Http\Requests\UpdateOrder;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductOption;
 use App\Models\User;
+use Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -33,8 +37,9 @@ class OrderController extends Controller
     {
         $categories = Category::all();
         $products = Product::all();
+        $count = Cart::count();
 
-        return view('orders.create', compact('categories', 'products'));
+        return view('orders.create', compact('categories', 'products', 'count'));
     }
 
     /**
@@ -43,15 +48,8 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreOrder $request)
     {
-        $request->validate([
-            'customer_name' => 'required',
-            'customer_phone' => 'required',
-            'customer_address' => 'required',
-            'delivery_time' => 'required|date_format:d/m/Y H:i',
-        ]);
-
         $order = new Order;
         if (Auth::check()) $order->user_id = Auth::id();
         $order->customer_name = $request->input('customer_name');
@@ -119,12 +117,8 @@ class OrderController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateOrder $request, $id)
     {
-        $request->validate([
-            'status' => 'required'
-        ]);
-
         $order = Order::findOrFail($id);
         $order->status = $request->input('status');
         if ($request->input('deliver_id') !== 0) $order->deliver_id = $request->input('deliver_id');
@@ -150,21 +144,24 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function orderHistory() {
-        if (Auth::check()){ // TODO: only user of order
+    public function orderHistory()
+    {
+        if (Auth::check()) { // TODO: only user of order
             $user_id = Auth::id();
             $orders = Order::where('user_id', $user_id)->get();
 
             return view('orders.history', compact('orders'));
         }
     }
+
     /**
      * Display order detail.
      *
      * @return \Illuminate\Http\Response
      */
-    public function orderDetail(int $id) {
-        if (!Auth::check()){ // TODO: only user of order
+    public function orderDetail(int $id)
+    {
+        if (Auth::check()) { // TODO: only user of order
             $order = Order::findOrFail($id)->first();
 
             return view('orders.detail', compact('order'));
@@ -177,11 +174,8 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function cancelOrder(Request $request) {
-        $request->validate([
-            'order_id' => 'required'
-        ]);
-
+    public function cancelOrder(CancelOrder $request)
+    {
         $order_id = $request->input('order_id');
         $order = Order::findOrFail($order_id); // TODO: only user of order
         $order->status = 'cancelled';

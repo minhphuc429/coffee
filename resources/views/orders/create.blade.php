@@ -1,4 +1,4 @@
-@extends('orders.layout')
+@extends('carts.layout')
 @section('styles')
     <style>
         .more-info {
@@ -156,7 +156,7 @@
                     },
                     dataType: 'json',
                     success: function (data) {
-                        //console.log(data);
+                        // console.log(data);
                         $('#pick_size').find('label').remove();
                         $.each(data, function (i, product_option) {
                             let surcharge_elm = '';
@@ -192,7 +192,8 @@
                     },
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data);
+                        // console.log(data);
+                        $('#item_count').text(data.count);
                         $("#modal_add_product").modal("hide");
                     },
                     error: function (error) {
