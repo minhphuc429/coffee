@@ -103,7 +103,8 @@
                     success: function (data) {
                         console.log(data);
                         input_qty.parents('tr').find('strong.subtotal').text(data.carts[rowId].subtotal + 'đ');
-                        $('#total').text(data.total + 'đ')
+                        $('#total').text(data.total + 'đ');
+                        $('#item_count').text(data.count);
                     },
                     error: function (error) {
                         console.log(error.responseJSON)

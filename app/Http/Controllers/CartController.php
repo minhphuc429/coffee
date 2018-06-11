@@ -9,7 +9,6 @@ use App\Models\Product;
 use App\Models\ProductOption;
 use Cart;
 use DateTime;
-use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
@@ -48,7 +47,12 @@ class CartController extends Controller
         Cart::update($rowId, $qty); // Will update the quantity
         $carts = Cart::content();
         $cartTotal = Cart::total();
-        return response()->json(['carts' => $carts, 'total' => $cartTotal]);
+        $count = Cart::count();
+        return response()->json([
+            'carts' => $carts,
+            'total' => $cartTotal,
+            'count' => $count
+        ]);
     }
 
     public function RemoveShoppingCartItem(RemoveCartItem $request)
