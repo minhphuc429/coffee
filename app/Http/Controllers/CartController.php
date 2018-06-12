@@ -51,7 +51,7 @@ class CartController extends Controller
         return response()->json([
             'carts' => $carts,
             'total' => $cartTotal,
-            'count' => $count
+            'count' => $count,
         ]);
     }
 
@@ -75,16 +75,17 @@ class CartController extends Controller
 
     /**
      * https://stackoverflow.com/a/3903320/5283067
-     * @param int $lower
-     * @param int $upper
-     * @param int $step
+     * @param int  $lower
+     * @param int  $upper
+     * @param int  $step
      * @param null $format
+     *
      * @return array
      */
-    public function createHalfHourIntervals($lower = 0, $upper = 23, $step = 1, $format = NULL)
+    public function createHalfHourIntervals($lower = 0, $upper = 23, $step = 1, $format = null)
     {
         $curDate = new DateTime;
-        if ($format === NULL) {
+        if ($format === null) {
             $format = 'g:ia'; // 9:30pm
         }
         $times = [];

@@ -25,9 +25,9 @@ class UpdateInformation extends FormRequest
     {
         return [
             'user_id' => 'required',
-            'name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
+            'name'    => 'required',
+            'email'   => 'required',
+            'phone'   => 'required',
             'address' => 'required',
         ];
     }

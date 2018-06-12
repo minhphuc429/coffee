@@ -21,7 +21,7 @@ class Order extends Model
     {
         $type = DB::select(DB::raw('SHOW COLUMNS FROM orders WHERE Field = "status"'))[0]->Type;
         preg_match('/^enum\((.*)\)$/', $type, $matches);
-        $values = array();
+        $values = [];
         foreach (explode(',', $matches[1]) as $value) {
             $values[trim($value, "'")] = ucfirst(trim($value, "'"));
         }

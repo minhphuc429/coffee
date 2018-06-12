@@ -43,6 +43,7 @@ class User extends Authenticatable
 
     /**
      * @param string|array $roles
+     *
      * @return bool
      */
     public function authorizeRoles($roles)
@@ -58,7 +59,9 @@ class User extends Authenticatable
 
     /**
      * Check multiple roles
+     *
      * @param array $roles
+     *
      * @return bool
      */
     public function hasAnyRole($roles)
@@ -73,7 +76,9 @@ class User extends Authenticatable
 
     /**
      * Check one role
+     *
      * @param string $role
+     *
      * @return bool
      */
     public function hasRole($role)

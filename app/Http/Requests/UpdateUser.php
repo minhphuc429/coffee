@@ -24,11 +24,11 @@ class UpdateUser extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'name'     => 'required',
+            'email'    => 'required|email|unique:users,email,' . $id,
             'password' => 'same:confirm-password',
-            'phone' => 'required|unique:users,phone,' . $id,
-            'address' => 'required',
+            'phone'    => 'required|unique:users,phone,' . $id,
+            'address'  => 'required',
         ];
     }
 }

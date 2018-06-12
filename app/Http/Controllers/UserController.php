@@ -42,6 +42,7 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(StoreUser $request)
@@ -59,6 +60,7 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -70,6 +72,7 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -84,7 +87,8 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateUser $request, $id)
@@ -93,7 +97,7 @@ class UserController extends Controller
         if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
         } else {
-            $input = array_except($input, array('password'));
+            $input = array_except($input, ['password']);
         }
 
         $user = User::findOrFail($id);
@@ -108,6 +112,7 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -143,6 +148,7 @@ class UserController extends Controller
      * Update the password for the user.
      *
      * @param  Request $request
+     *
      * @return Response
      */
     public function updatePassword(UpdatePassword $request)

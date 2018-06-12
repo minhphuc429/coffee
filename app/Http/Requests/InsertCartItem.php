@@ -25,7 +25,7 @@ class InsertCartItem extends FormRequest
     {
         return [
             'product_id' => 'required|numeric',
-            'qty' => 'required|numeric',
+            'qty'        => 'required|numeric',
         ];
     }
 }

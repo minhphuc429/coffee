@@ -24,10 +24,10 @@ class StoreOrder extends FormRequest
     public function rules()
     {
         return [
-            'customer_name' => 'required',
-            'customer_phone' => 'required',
+            'customer_name'    => 'required',
+            'customer_phone'   => 'required',
             'customer_address' => 'required',
-            'delivery_time' => 'required|date_format:d/m/Y H:i',
+            'delivery_time'    => 'required|date_format:d/m/Y H:i',
         ];
     }
 }

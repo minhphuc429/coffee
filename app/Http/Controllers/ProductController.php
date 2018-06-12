@@ -37,6 +37,7 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(StoreProduct $request)
@@ -50,9 +51,9 @@ class ProductController extends Controller
 
         foreach ($request->input('values') as $key => $value)
             $product->productOptions()->create([
-                'key' => 'size',
-                'value' => $value,
-                'surcharge' => $request->input('surcharges')[$key]
+                'key'       => 'size',
+                'value'     => $value,
+                'surcharge' => $request->input('surcharges')[$key],
             ]);
 
         return redirect()->back()->with('status', 'Thêm Sản Phẩm Thành Công');
@@ -62,6 +63,7 @@ class ProductController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -73,6 +75,7 @@ class ProductController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -89,7 +92,8 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(StoreProduct $request, $id)
@@ -108,9 +112,9 @@ class ProductController extends Controller
             ProductOption::where('product_id', $id)->delete();
             foreach ($request->input('values') as $key => $value)
                 $product->productOptions()->create([
-                    'key' => 'size',
-                    'value' => $value,
-                    'surcharge' => $request->input('surcharges')[$key]
+                    'key'       => 'size',
+                    'value'     => $value,
+                    'surcharge' => $request->input('surcharges')[$key],
                 ]);
         }
 
@@ -121,6 +125,7 @@ class ProductController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
