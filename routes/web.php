@@ -20,6 +20,8 @@ Auth::routes();
 Route::get('/redirect/{social}', 'SocialAuthController@redirectToProvider');
 Route::get('/callback/{social}', 'SocialAuthController@handleProviderCallback');
 
+Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::prefix('dashboard')->group(function () {

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AccountVerification;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Mail;
 
 class RegisterController extends Controller
 {
@@ -59,16 +62,51 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array $data
+     * @param array $data
      *
-     * @return \App\Models\User
+     * @return User|\Illuminate\Database\Eloquent\Model
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name'     => $data['name'],
             'email'    => $data['email'],
             'password' => Hash::make($data['password']),
+            'status'   => 0,
+            'token'    => str_random(64),
         ]);
+
+        Mail::to($user->email)->send(new AccountVerification($user));
+
+        return $user;
+    }
+
+    /**
+     * @param $token
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function verifyUser($token)
+    {
+        $user = User::where('token', $token)->first();
+        if (isset($user)) {
+            if (!$user->status) {
+                $user->status = 1;
+                $user->save();
+                $status = "Your e-mail is verified. You can now login.";
+            } else {
+                $status = "Your e-mail is already verified. You can now login.";
+            }
+        } else {
+            return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
+        }
+
+        return redirect('/login')->with('status', $status);
+    }
+
+    protected function registered(Request $request, $user)
+    {
+        $this->guard()->logout();
+        return redirect('/login')->with('status', 'We sent you an activation code. Check your email and click on the link to verify.');
     }
 }
