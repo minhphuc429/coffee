@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CancelOrder;
 use App\Http\Requests\StoreOrder;
 use App\Http\Requests\UpdateOrder;
+use App\Mail\OrderProcessing;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
@@ -13,6 +14,7 @@ use App\Models\User;
 use Cart;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Mail;
 
 class OrderController extends Controller
 {
@@ -53,6 +55,7 @@ class OrderController extends Controller
         $order = new Order;
         if (Auth::check()) $order->user_id = Auth::id();
         $order->customer_name = $request->input('customer_name');
+        $order->customer_email = $request->input('customer_email');
         $order->customer_address = $request->input('customer_address');
         $order->customer_phone = $request->input('customer_phone');
         $order->delivery_time = Carbon::createFromFormat('d/m/Y H:i', $request->input('delivery_time'));
@@ -74,6 +77,12 @@ class OrderController extends Controller
         }
 
         \Cart::destroy();
+
+        if (Auth::check())
+            Mail::to(Auth::user()->email)->queue(new OrderProcessing(Auth::user()->name, $order));
+        else
+            Mail::to($order->customer_email)->queue(new OrderProcessing($order->customer_name, $order));
+
         return redirect()->back()->with('status', 'Đặt Hàng Thành Công');
     }
 

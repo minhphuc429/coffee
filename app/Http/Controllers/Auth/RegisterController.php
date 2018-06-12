@@ -76,7 +76,7 @@ class RegisterController extends Controller
             'token'    => str_random(64),
         ]);
 
-        Mail::to($user->email)->send(new AccountVerification($user));
+        Mail::to($user->email)->queue(new AccountVerification($user));
 
         return $user;
     }

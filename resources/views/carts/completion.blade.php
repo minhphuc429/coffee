@@ -52,6 +52,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="customer_email">Email</label>
+                    <input type="email" class="form-control" name="customer_email" id="customer_email">
+                </div>
+
+                <div class="form-group">
                     <label for="delivery_time">Chọn thời gian giao hàng</label>
                     {{ Form::select('time', $halfHourIntervals, null, ['class' => 'form-control select2', 'name' => 'delivery_time']) }}
                 </div>
