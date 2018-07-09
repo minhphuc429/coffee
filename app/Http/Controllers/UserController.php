@@ -6,14 +6,23 @@ use App\Http\Requests\StoreUser;
 use App\Http\Requests\UpdateInformation;
 use App\Http\Requests\UpdatePassword;
 use App\Http\Requests\UpdateUser;
-use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Repositories\Eloquent\RoleRepository;
+use App\Repositories\Eloquent\UserRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    private $userRepository;
+    private $roleRepository;
+
+    public function __construct(UserRepository $userRepository, RoleRepository $roleRepository)
+    {
+        $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +30,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = $this->userRepository->all();
 
         return view('users.index', compact('users'));
     }
@@ -33,7 +42,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::all();
+        $roles = $this->roleRepository->all();
 
         return view('users.create', compact('roles'));
     }
@@ -51,7 +60,7 @@ class UserController extends Controller
         $input['password'] = Hash::make($input['password']);
 
         $user = User::create($input);
-        $user->roles()->attach(Role::findOrFail($request->input('roles')));
+        $user->roles()->attach($this->roleRepository->findOrFail($request->input('roles')));
 
         return redirect()->back()->with('status', 'Thêm User Thành Công');
     }
@@ -77,8 +86,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
-        $roles = Role::all();
+        $user = $this->userRepository->findOrFail($id);
+        $roles = $this->roleRepository->all();
 
         return view('users.edit', compact('user', 'roles'));
     }
@@ -87,7 +96,7 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param  int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -100,10 +109,10 @@ class UserController extends Controller
             $input = array_except($input, ['password']);
         }
 
-        $user = User::findOrFail($id);
+        $user = $this->userRepository->findOrFail($id);
         $user->update($input);
         DB::table('role_user')->where('user_id', $id)->delete();
-        $user->roles()->attach(Role::findOrFail($request->input('roles')));
+        $user->roles()->attach($this->roleRepository->findOrFail($request->input('roles')));
 
         return redirect()->back()->with('status', 'Cập Nhật User Thành Công');
     }
@@ -117,7 +126,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrfail($id);
+        $user = $this->userRepository->findOrfail($id);
         $user->delete();
         DB::table('role_user')->where('user_id', $id)->delete();
 
@@ -127,14 +136,14 @@ class UserController extends Controller
     public function editInformation()
     {
         $user_id = \Auth::id();
-        $user = User::findOrFail($user_id);
+        $user = $this->userRepository->findOrFail($user_id);
 
         return view('users.information', compact('user'));
     }
 
     public function updateInformation(UpdateInformation $request)
     {
-        $user = User::findOrFail($request->input('user_id'));
+        $user = $this->userRepository->findOrFail($request->input('user_id'));
         $user->name = $request->input('name');
         $user->address = $request->input('address');
         $user->email = $request->input('email');
@@ -147,7 +156,7 @@ class UserController extends Controller
     /**
      * Update the password for the user.
      *
-     * @param  Request $request
+     * @param UpdatePassword $request
      *
      * @return Response
      */

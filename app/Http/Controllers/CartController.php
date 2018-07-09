@@ -5,13 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InsertCartItem;
 use App\Http\Requests\RemoveCartItem;
 use App\Http\Requests\UpdateShoppingCartItem;
-use App\Models\Product;
-use App\Models\ProductOption;
+use App\Repositories\Eloquent\ProductOptionRepository;
+use App\Repositories\Eloquent\ProductRepository;
 use Cart;
 use DateTime;
 
 class CartController extends Controller
 {
+    private $productRepository;
+    private $productOptionRepository;
+
+    public function __construct(ProductRepository $productRepository, ProductOptionRepository $productOptionRepository)
+    {
+        $this->productRepository = $productRepository;
+        $this->productOptionRepository = $productOptionRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +30,7 @@ class CartController extends Controller
     {
         $carts = Cart::content();
         $total = Cart::total();
-        $products = Product::all(['id', 'image']);
+        $products = $this->productRepository->all(['id', 'image']);
         $count = Cart::count();
 
         return view('carts.index', compact('carts', 'total', 'products', 'count'));
@@ -30,8 +39,8 @@ class CartController extends Controller
     public function InsertShoppingCartItem(InsertCartItem $request)
     {
         $productId = $request->input('product_id');
-        $product = Product::findOrFail($productId);
-        $product_option = ProductOption::where('id', $request->input('product_option_id'))->first(['value']);
+        $product = $this->productRepository->findOrFail($productId);
+        $product_option = $this->productOptionRepository->where('id', $request->input('product_option_id'))->first(['value']);
         $size = [];
         if ($product_option) $size = ['size' => $product_option->value];
         Cart::add($productId, $product->name, $request->input('qty'), $product->price, $size);
@@ -75,9 +84,9 @@ class CartController extends Controller
 
     /**
      * https://stackoverflow.com/a/3903320/5283067
-     * @param int  $lower
-     * @param int  $upper
-     * @param int  $step
+     * @param int $lower
+     * @param int $upper
+     * @param int $step
      * @param null $format
      *
      * @return array

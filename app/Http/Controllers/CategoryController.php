@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategory;
 use App\Http\Requests\UpdateCategory;
 use App\Models\Category;
+use App\Repositories\Eloquent\CategoryRepository;
 
 class CategoryController extends Controller
 {
+    private $categoryRepository;
+
+    public function __construct(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +23,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = $this->categoryRepository->all();
         return view('categories.index', compact('categories'));
     }
 
@@ -75,13 +83,13 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param  int $id
      *
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateCategory $request, $id)
     {
-        $category = Category::findOrfail($id);
+        $category = $this->categoryRepository->findOrfail($id);
         $category->name = $request->input('name');
         $category->save();
 
@@ -97,7 +105,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::findOrfail($id);
+        $category = $this->categoryRepository->findOrfail($id);
         $category->delete();
 
         return response()->json();

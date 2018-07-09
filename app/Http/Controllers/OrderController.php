@@ -6,11 +6,12 @@ use App\Http\Requests\CancelOrder;
 use App\Http\Requests\StoreOrder;
 use App\Http\Requests\UpdateOrder;
 use App\Mail\OrderProcessing;
-use App\Models\Category;
 use App\Models\Order;
-use App\Models\Product;
 use App\Models\ProductOption;
 use App\Models\User;
+use App\Repositories\Eloquent\CategoryRepository;
+use App\Repositories\Eloquent\OrderRepository;
+use App\Repositories\Eloquent\ProductRepository;
 use Cart;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,19 @@ use Mail;
 
 class OrderController extends Controller
 {
+    private $orderRepository;
+    private $categoryRepository;
+    private $productRepository;
+
+    public function __construct(OrderRepository $orderRepository,
+                                CategoryRepository $categoryRepository,
+                                ProductRepository $productRepository)
+    {
+        $this->orderRepository = $orderRepository;
+        $this->categoryRepository = $categoryRepository;
+        $this->productRepository = $productRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +39,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::all();
+        $orders = $this->orderRepository->all();
         return view('orders.index', compact('orders'));
     }
 
@@ -36,8 +50,8 @@ class OrderController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        $products = Product::all();
+        $categories = $this->categoryRepository->all();
+        $products = $this->productRepository->all();
         $count = Cart::count();
 
         return view('orders.create', compact('categories', 'products', 'count'));
@@ -95,7 +109,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = Order::findOrFail($id);
+        $order = $this->orderRepository->findOrFail($id);
         $deliver_id = $order->deliver_id;
         if ($deliver_id)
             $deliver = User::findOrFail($deliver_id, ['name', 'phone']);
@@ -112,7 +126,7 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-        $order = Order::findOrFail($id);
+        $order = $this->orderRepository->findOrFail($id);
         $deliver_id = $order->deliver_id;
         $delivers = User::whereHas('roles', function ($q) {
             $q->where('name', 'deliver');
@@ -125,13 +139,13 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param  int $id
      *
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateOrder $request, $id)
     {
-        $order = Order::findOrFail($id);
+        $order = $this->orderRepository->findOrFail($id);
         $order->status = $request->input('status');
         if ($request->input('deliver_id') !== 0) $order->deliver_id = $request->input('deliver_id');
         $order->update();
@@ -147,7 +161,7 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        $order = Order::findOrFail($id);
+        $order = $this->orderRepository->findOrFail($id);
         $order->delete();
         return response()->json();
     }
@@ -161,7 +175,7 @@ class OrderController extends Controller
     {
         if (Auth::check()) { // TODO: only user of order
             $user_id = Auth::id();
-            $orders = Order::where('user_id', $user_id)->get();
+            $orders = $this->orderRepository->where('user_id', $user_id)->get();
 
             return view('orders.history', compact('orders'));
         }
@@ -175,7 +189,7 @@ class OrderController extends Controller
     public function orderDetail(int $id)
     {
         if (Auth::check()) { // TODO: only user of order
-            $order = Order::findOrFail($id)->first();
+            $order = $this->orderRepository->findOrFail($id)->first();
 
             return view('orders.detail', compact('order'));
         }
@@ -191,7 +205,7 @@ class OrderController extends Controller
     public function cancelOrder(CancelOrder $request)
     {
         $order_id = $request->input('order_id');
-        $order = Order::findOrFail($order_id); // TODO: only user of order
+        $order = $this->orderRepository->findOrFail($order_id); // TODO: only user of order
         $order->status = 'cancelled';
         $order->update();
 

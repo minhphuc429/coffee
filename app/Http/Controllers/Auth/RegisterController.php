@@ -44,6 +44,29 @@ class RegisterController extends Controller
     }
 
     /**
+     * @param $token
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function verifyUser($token)
+    {
+        $user = User::where('token', $token)->first();
+        if (isset($user)) {
+            if (!$user->status) {
+                $user->status = 1;
+                $user->save();
+                $status = "Your e-mail is verified. You can now login.";
+            } else {
+                $status = "Your e-mail is already verified. You can now login.";
+            }
+        } else {
+            return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
+        }
+
+        return redirect('/login')->with('status', $status);
+    }
+
+    /**
      * Get a validator for an incoming registration request.
      *
      * @param  array $data
@@ -79,29 +102,6 @@ class RegisterController extends Controller
         Mail::to($user->email)->queue(new AccountVerification($user));
 
         return $user;
-    }
-
-    /**
-     * @param $token
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function verifyUser($token)
-    {
-        $user = User::where('token', $token)->first();
-        if (isset($user)) {
-            if (!$user->status) {
-                $user->status = 1;
-                $user->save();
-                $status = "Your e-mail is verified. You can now login.";
-            } else {
-                $status = "Your e-mail is already verified. You can now login.";
-            }
-        } else {
-            return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
-        }
-
-        return redirect('/login')->with('status', $status);
     }
 
     protected function registered(Request $request, $user)

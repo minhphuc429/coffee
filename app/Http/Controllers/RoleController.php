@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRole;
 use App\Http\Requests\UpdateRole;
-use App\Models\Role;
+use App\Repositories\Eloquent\RoleRepository;
 use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
+    private $roleRepository;
+
+    public function __construct(RoleRepository $roleRepository)
+    {
+        $this->roleRepository = $roleRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +23,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
+        $roles = $this->roleRepository->all();
 
         return view('roles.index', compact('roles'));
     }
@@ -40,7 +47,7 @@ class RoleController extends Controller
      */
     public function store(StoreRole $request)
     {
-        Role::create($request->all());
+        $this->roleRepository->create($request->all());
 
         return redirect()->back()->with('status', 'Tạo Role Thành Công');
     }
@@ -66,7 +73,7 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        $role = Role::findOrFail($id);
+        $role = $this->roleRepository->findOrFail($id);
 
         return view('roles.edit', compact('role'));
     }
@@ -75,13 +82,13 @@ class RoleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param  int $id
      *
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateRole $request, $id)
     {
-        $role = Role::findOrFail($id);
+        $role = $this->roleRepository->findOrFail($id);
         $role->update($request->all());
 
         return redirect()->back()->with('status', 'Cập Nhật Role Thành Công');
@@ -96,7 +103,7 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::findOrfail($id);
+        $role = $this->roleRepository->findOrfail($id);
         $role->delete();
         DB::table('role_user')->where('role_id', $id)->delete();
 
